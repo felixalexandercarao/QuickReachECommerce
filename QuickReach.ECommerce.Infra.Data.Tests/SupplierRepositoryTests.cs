@@ -13,66 +13,66 @@ namespace QuickReach.ECommerce.Infra.Data.Tests
         [Fact]
         public void Create_WithValidInformation_Works()
         {
-            //Arrage
-            var context = new ECommerceDbContext();
-            var sut = new SupplierRepository(context);
-            Supplier supplier = new Supplier
-            {
-                Name="Yakult Inc.",
-                Description="Lactobacillus Protectus",
-                IsActive=false
-            };
-            //Act
-            sut.Create(supplier);
-            var result = sut.Retrieve(supplier.ID);
-            //Assert
-            Assert.NotNull(result);
-            Assert.Equal(result.Name, supplier.Name);
-            Assert.Equal(result.Description, supplier.Description);
-            //Cleanup
-            sut.Delete(result.ID);
-        }
-
-        [Fact]
-        public void Delete_Works()
-        {
-            //Arrage
-            var context = new ECommerceDbContext();
-            var sut = new SupplierRepository(context);
+            var options = new DbContextOptionsBuilder<ECommerceDbContext>()
+                .UseInMemoryDatabase($"CategoryForTesting{Guid.NewGuid()}")
+                .Options;
             Supplier supplier = new Supplier
             {
                 Name = "Yakult Inc.",
                 Description = "Lactobacillus Protectus",
                 IsActive = false
             };
-            sut.Create(supplier);
-            var result = sut.Retrieve(supplier.ID);
-            Assert.NotNull(result);
-            //Act
-            sut.Delete(result.ID);
-            //Assert
-            var newResult = sut.Retrieve(result.ID);
-            Assert.Null(newResult);
+            using (var context = new ECommerceDbContext(options))
+            {
+                var sut = new SupplierRepository(context);
+                //Act
+                sut.Create(supplier);
+            }
+            using (var context = new ECommerceDbContext(options))
+            {
+                var result = context.Suppliers.Find(supplier.ID);
+                Assert.NotNull(result);
+                Assert.Equal(result.Name, supplier.Name);
+                Assert.Equal(result.Description, supplier.Description);
+            }
         }
 
-        //[Fact]
-        //public void Delete_NonExistent_()
-        //{
-        //    //Arrage
-        //    var context = new ECommerceDbContext();
-        //    var sut = new SupplierRepository(context);
+        [Fact]
+        public void Delete_RemovesValidDataFromDatabase()
+        {
+            var options = new DbContextOptionsBuilder<ECommerceDbContext>()
+                .UseInMemoryDatabase($"CategoryForTesting{Guid.NewGuid()}")
+                .Options;
+            Supplier supplier = new Supplier
+            {
+                Name = "Yakult Inc.",
+                Description = "Lactobacillus Protectus",
+                IsActive = false
+            };
+            using (var context = new ECommerceDbContext(options))
+            {
+                context.Suppliers.Add(supplier);
+                context.SaveChanges();
 
-        //    //Act
-        //    sut.Delete(-1);
-        //    //Assert
-        //    Assert.
-        //}
+            }
+            using (var context = new ECommerceDbContext(options))
+            {
+                var sut = new SupplierRepository(context);
+                //Act
+                sut.Delete(supplier.ID);
+                //Assert
+                var result = sut.Retrieve(supplier.ID);
+                Assert.Null(result);
+            }
+              
+        }
 
         [Fact]
         public void Retrieve_ValidData_ShouldWork()
         {
-            var context = new ECommerceDbContext();
-            var sut = new SupplierRepository(context);
+            var options = new DbContextOptionsBuilder<ECommerceDbContext>()
+                .UseInMemoryDatabase($"CategoryForTesting{Guid.NewGuid()}")
+                .Options;
             string expectedName = "Yakult Inc.";
             string expectedDescription = "Lactobacillus Protectus";
             bool expectedIsActive = false;
@@ -82,79 +82,119 @@ namespace QuickReach.ECommerce.Infra.Data.Tests
                 Description = expectedDescription,
                 IsActive = expectedIsActive
             };
-            sut.Create(supplier);
-            //Act
-            var result = sut.Retrieve(supplier.ID);
-            //Assert
-            Assert.NotNull(result);
-            Assert.Equal(result.Name, expectedName);
-            Assert.Equal(result.Description, expectedDescription);
-            Assert.Equal(result.IsActive, expectedIsActive);
-            //Cleanup
-            sut.Delete(result.ID);
+            using (var context = new ECommerceDbContext(options))
+            {
+                context.Suppliers.Add(supplier);
+                context.SaveChanges();
+            }
+            using (var context = new ECommerceDbContext(options))
+            {
+                var sut = new SupplierRepository(context);
+                //Act
+                var result = sut.Retrieve(supplier.ID);
+                //Assert
+                Assert.NotNull(result);
+                Assert.Equal(result.Name, expectedName);
+                Assert.Equal(result.Description, expectedDescription);
+                Assert.Equal(result.IsActive, expectedIsActive);
+            }
         }
 
-        [Fact]
-        public void Retrieve_WithSkipAndCount_Work()
+        [Theory]
+        [InlineData(0, 5, 5)]
+        [InlineData(0, 20, 20)]
+        [InlineData(17, 5, 3)]
+        [InlineData(15, 5, 5)]
+        [InlineData(20, 5, 0)]
+        public void Retrieve_WithSkipAndCount_Work(int startNumber, int skipAmount, int expectedResult)
         {
-            var context = new ECommerceDbContext();
-            var sut = new SupplierRepository(context);
-            for(int i = 0; i< 30; i += 1)
+            var options = new DbContextOptionsBuilder<ECommerceDbContext>()
+                .UseInMemoryDatabase($"CategoryForTesting{Guid.NewGuid()}")
+                .Options;
+            using (var context = new ECommerceDbContext(options))
             {
-                Supplier supplier = new Supplier
+                for (int i = 0; i < 20; i += 1)
                 {
-                    Name = String.Format("Name {0}",i),
-                    Description = String.Format("Description {0}", i),
-                    IsActive = true
-                };
-                sut.Create(supplier);
+                    context.Suppliers.Add(new Supplier
+                    {
+                        Name = String.Format("Name {0}", i),
+                        Description = String.Format("Description {0}", i),
+                        IsActive = true
+                    });
+                }
+                context.SaveChanges();
             }
-            var list = sut.Retrieve(3, 3);
-            Assert.True(3== list.Count());//Pano machecheck kung na skip yung unang tatlo
-
-            //Cleanup
-            var listToBeDeleted = sut.Retrieve(0, Int32.MaxValue);
-            foreach(Supplier supplier in listToBeDeleted)
+            using (var context = new ECommerceDbContext(options))
             {
-                sut.Delete(supplier.ID);
-            }
+                var sut = new SupplierRepository(context);
+                //Act
+                var list = sut.Retrieve(startNumber, skipAmount);
+
+                //Assert
+                Assert.True(expectedResult == list.Count());
+            }         
         }
 
         [Fact]
         public void Retrieve_WithMissingData_ShouldReturnNull()
         {
-            //Arrange
-            var context = new ECommerceDbContext();
-            var sut = new SupplierRepository(context);
-            //Act
-            var result = sut.Retrieve(-1);
-            //Assert
-            Assert.Null(result);
+            var options = new DbContextOptionsBuilder<ECommerceDbContext>()
+                .UseInMemoryDatabase($"CategoryForTesting{Guid.NewGuid()}")
+                .Options;
+            using (var context = new ECommerceDbContext(options))
+            {
+                //Arrange
+                var sut = new SupplierRepository(context);
+                //Act
+                var result = sut.Retrieve(-1);
+                //Assert
+                Assert.Null(result);
+            }          
         }
 
         [Fact]
         public void Update_WithValidData_ShouldWork()
         {
-            var context = new ECommerceDbContext();
-            var sut = new SupplierRepository(context);
+            var options = new DbContextOptionsBuilder<ECommerceDbContext>()
+                .UseInMemoryDatabase($"CategoryForTesting{Guid.NewGuid()}")
+                .Options;
             string expectedName = "Yakult Inc.";
             string expectedDescription = "Lactobacillus Protectus";
             bool expectedIsActive = false;
-            Supplier supplier = new Supplier
+
+            int supplierID = 0;
+            
+            using (var context = new ECommerceDbContext(options))
             {
-                Name = "Jakult inc.",
-                Description = "Lactobacillus Aysus",
-                IsActive = true
-            };
-            sut.Create(supplier);
-            var actual = sut.Retrieve(supplier.ID);
-            //Assert
-            actual.Name = expectedName;
-            actual.Description = expectedDescription;
-            actual.IsActive = expectedIsActive;
-            sut.Update(actual.ID, actual);
-            //Cleanup
-            sut.Delete(actual.ID);
+                Supplier supplier = new Supplier
+                {
+                    Name = "Jakult inc.",
+                    Description = "Lactobacillus Aysus",
+                    IsActive = true
+                };
+                context.Suppliers.Add(supplier);
+                context.SaveChanges();
+                supplierID = supplier.ID;
+            }
+            using (var context = new ECommerceDbContext(options))
+            {
+                var actual = context.Suppliers.Find(supplierID);
+
+                var sut = new SupplierRepository(context);
+                //Act
+                actual.Name = expectedName;
+                actual.Description = expectedDescription;
+                actual.IsActive = expectedIsActive;
+                sut.Update(actual.ID, actual);
+
+                var result = sut.Retrieve(actual.ID);
+
+                //Assert
+                Assert.Equal(expectedName, result.Name);
+                Assert.Equal(expectedDescription, result.Description);
+                Assert.True(expectedIsActive== result.IsActive);
+            }
+
         }
     }
 }
