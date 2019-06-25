@@ -137,10 +137,16 @@ namespace QuickReach.ECommerce.Infra.Data.Tests
         [Fact]
         public void Delete_WithValidEntityIDDeletes()
         {
-            // Arrange
+            var connectionBuilder = new SqliteConnectionStringBuilder()
+            {
+                DataSource = ":memory:"
+            };
+            var connection = new SqliteConnection(connectionBuilder.ConnectionString);
+
             var options = new DbContextOptionsBuilder<ECommerceDbContext>()
-                .UseInMemoryDatabase($"CategoryForTesting{Guid.NewGuid()}")
-                .Options;
+                    .UseSqlite(connection)
+                    .Options;
+            // Arrange
             var category = new Category
             {
                 Name = "Shoes",
@@ -148,6 +154,8 @@ namespace QuickReach.ECommerce.Infra.Data.Tests
             };
             using (var context = new ECommerceDbContext(options))
             {
+                context.Database.OpenConnection();
+                context.Database.EnsureCreated();
                 context.Categories.Add(category);
                 context.SaveChanges();
             }

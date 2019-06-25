@@ -16,6 +16,7 @@ namespace QuickReach.ECommerce.Infra.Data.Tests
             var options = new DbContextOptionsBuilder<ECommerceDbContext>()
                 .UseInMemoryDatabase($"CategoryForTesting{Guid.NewGuid()}")
                 .Options;
+            //Arrange
             Supplier supplier = new Supplier
             {
                 Name = "Yakult Inc.",
@@ -31,6 +32,7 @@ namespace QuickReach.ECommerce.Infra.Data.Tests
             using (var context = new ECommerceDbContext(options))
             {
                 var result = context.Suppliers.Find(supplier.ID);
+                //Assert
                 Assert.NotNull(result);
                 Assert.Equal(result.Name, supplier.Name);
                 Assert.Equal(result.Description, supplier.Description);
@@ -43,6 +45,7 @@ namespace QuickReach.ECommerce.Infra.Data.Tests
             var options = new DbContextOptionsBuilder<ECommerceDbContext>()
                 .UseInMemoryDatabase($"CategoryForTesting{Guid.NewGuid()}")
                 .Options;
+            //Arrange
             Supplier supplier = new Supplier
             {
                 Name = "Yakult Inc.",
@@ -53,7 +56,6 @@ namespace QuickReach.ECommerce.Infra.Data.Tests
             {
                 context.Suppliers.Add(supplier);
                 context.SaveChanges();
-
             }
             using (var context = new ECommerceDbContext(options))
             {
@@ -73,6 +75,7 @@ namespace QuickReach.ECommerce.Infra.Data.Tests
             var options = new DbContextOptionsBuilder<ECommerceDbContext>()
                 .UseInMemoryDatabase($"CategoryForTesting{Guid.NewGuid()}")
                 .Options;
+            //Arrange
             string expectedName = "Yakult Inc.";
             string expectedDescription = "Lactobacillus Protectus";
             bool expectedIsActive = false;
@@ -111,6 +114,7 @@ namespace QuickReach.ECommerce.Infra.Data.Tests
             var options = new DbContextOptionsBuilder<ECommerceDbContext>()
                 .UseInMemoryDatabase($"CategoryForTesting{Guid.NewGuid()}")
                 .Options;
+            //Arrange
             using (var context = new ECommerceDbContext(options))
             {
                 for (int i = 0; i < 20; i += 1)
@@ -158,6 +162,7 @@ namespace QuickReach.ECommerce.Infra.Data.Tests
             var options = new DbContextOptionsBuilder<ECommerceDbContext>()
                 .UseInMemoryDatabase($"CategoryForTesting{Guid.NewGuid()}")
                 .Options;
+            //Arrange
             string expectedName = "Yakult Inc.";
             string expectedDescription = "Lactobacillus Protectus";
             bool expectedIsActive = false;

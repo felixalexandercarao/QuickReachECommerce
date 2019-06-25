@@ -16,9 +16,16 @@ namespace QuickReach.ECommerce.Infra.Data.Tests
         [Fact]
         public void Create_WithValidData_ShouldCreateDatabaseRecord()
         {
+            var connectionBuilder = new SqliteConnectionStringBuilder()
+            {
+                DataSource = ":memory:"
+            };
+            var connection = new SqliteConnection(connectionBuilder.ConnectionString);
+
             var options = new DbContextOptionsBuilder<ECommerceDbContext>()
-                .UseInMemoryDatabase($"CategoryForTesting{Guid.NewGuid()}")
-                .Options;
+                    .UseSqlite(connection)
+                    .Options;
+            //Arrange
             var category = new Category
             {
                 Name = "Electronics",
@@ -26,6 +33,8 @@ namespace QuickReach.ECommerce.Infra.Data.Tests
             };
             using (var context = new ECommerceDbContext(options))
             {
+                context.Database.OpenConnection();
+                context.Database.EnsureCreated();
                 context.Categories.Add(category);
                 context.SaveChanges();
             }
@@ -60,9 +69,16 @@ namespace QuickReach.ECommerce.Infra.Data.Tests
         [Fact]
         public void Delete_WithValidData_ShouldWork()
         {
+            // Arrange
+            var connectionBuilder = new SqliteConnectionStringBuilder()
+            {
+                DataSource = ":memory:"
+            };
+            var connection = new SqliteConnection(connectionBuilder.ConnectionString);
+
             var options = new DbContextOptionsBuilder<ECommerceDbContext>()
-                .UseInMemoryDatabase($"CategoryForTesting{Guid.NewGuid()}")
-                .Options;
+                    .UseSqlite(connection)
+                    .Options;
             var category = new Category
             {
                 Name = "Electronics",
@@ -70,6 +86,8 @@ namespace QuickReach.ECommerce.Infra.Data.Tests
             };
             using (var context = new ECommerceDbContext(options))
             {
+                context.Database.OpenConnection();
+                context.Database.EnsureCreated();
                 context.Categories.Add(category);
                 context.SaveChanges();
             }
@@ -105,9 +123,16 @@ namespace QuickReach.ECommerce.Infra.Data.Tests
         [Fact]
         public void Retrieve_WitValidInfo_ShouldWork()
         {
+            // Arrange
+            var connectionBuilder = new SqliteConnectionStringBuilder()
+            {
+                DataSource = ":memory:"
+            };
+            var connection = new SqliteConnection(connectionBuilder.ConnectionString);
+
             var options = new DbContextOptionsBuilder<ECommerceDbContext>()
-                .UseInMemoryDatabase($"CategoryForTesting{Guid.NewGuid()}")
-                .Options;
+                    .UseSqlite(connection)
+                    .Options;
             var category = new Category
             {
                 Name = "Electronics",
@@ -115,6 +140,8 @@ namespace QuickReach.ECommerce.Infra.Data.Tests
             };
             using (var context = new ECommerceDbContext(options))
             {
+                context.Database.OpenConnection();
+                context.Database.EnsureCreated();
                 context.Categories.Add(category);
                 context.SaveChanges();
             }
@@ -202,9 +229,16 @@ namespace QuickReach.ECommerce.Infra.Data.Tests
         [Fact]
         public void Update_WithValidData_ShouldWork()
         {
+            // Arrange
+            var connectionBuilder = new SqliteConnectionStringBuilder()
+            {
+                DataSource = ":memory:"
+            };
+            var connection = new SqliteConnection(connectionBuilder.ConnectionString);
+
             var options = new DbContextOptionsBuilder<ECommerceDbContext>()
-                 .UseInMemoryDatabase($"CategoryForTesting{Guid.NewGuid()}")
-                 .Options;
+                    .UseSqlite(connection)
+                    .Options;
             int expectedId = 0;
             var category = new Category
             {
@@ -213,6 +247,8 @@ namespace QuickReach.ECommerce.Infra.Data.Tests
             };
             using (var context = new ECommerceDbContext(options))
             {
+                context.Database.OpenConnection();
+                context.Database.EnsureCreated();
                 context.Categories.Add(category);
                 context.SaveChanges();
             }
@@ -258,11 +294,20 @@ namespace QuickReach.ECommerce.Infra.Data.Tests
         [Fact]
         public void Retrieve_WithMissingData_ShouldNot_Work()
         {
+            // Arrange
+            var connectionBuilder = new SqliteConnectionStringBuilder()
+            {
+                DataSource = ":memory:"
+            };
+            var connection = new SqliteConnection(connectionBuilder.ConnectionString);
+
             var options = new DbContextOptionsBuilder<ECommerceDbContext>()
-                .UseInMemoryDatabase($"CategoryForTesting{Guid.NewGuid()}")
-                .Options;
+                    .UseSqlite(connection)
+                    .Options;
             using (var context = new ECommerceDbContext(options))
             {
+                context.Database.OpenConnection();
+                context.Database.EnsureCreated();
                 var sut = new ProductRepository(context);
                 //Act
                 var result = sut.Retrieve(-1);
