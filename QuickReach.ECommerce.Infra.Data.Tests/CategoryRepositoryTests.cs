@@ -9,6 +9,7 @@ using QuickReach.ECommerce.Infra.Data.Repositories;
 using QuickReach.ECommerce.Domain.Models;
 using Microsoft.EntityFrameworkCore.InMemory.Storage.Internal;
 using Microsoft.Data.Sqlite;
+using QuickReach.ECommerce.Domain.NewExceptions;
 
 namespace QuickReach.ECommerce.Infra.Data.Tests
 {
@@ -214,6 +215,56 @@ namespace QuickReach.ECommerce.Infra.Data.Tests
                 Assert.Equal(expectedName, actual.Name);
                 Assert.Equal(expectedDescription, actual.Description);
             }
+        }
+
+        [Fact]
+        public void Delete_CategoryWithExistingProducts_ShouldThrowExceptions()
+        {
+            //Arrange
+            var connectionBuilder = new SqliteConnectionStringBuilder()
+            {
+                DataSource = ":memory:"
+            };
+            var connection = new SqliteConnection(connectionBuilder.ConnectionString);
+
+            var options = new DbContextOptionsBuilder<ECommerceDbContext>()
+                    .UseSqlite(connection)
+                    .Options;
+
+            var category = new Category
+            {
+                Name = "Electronics",
+                Description = "Gadgets",
+            };
+            using (var context = new ECommerceDbContext(options))
+            {
+                context.Database.OpenConnection();
+                context.Database.EnsureCreated();
+                context.Categories.Add(category);
+                context.SaveChanges();
+            }
+            var product = new Product
+            {
+                Name = "ZST Earphones",
+                Description = "Hybrid Earphones",
+                IsActive = true,
+                Price = 500,
+                ImageURL = "picture.net",
+                CategoryID = category.ID,
+            };
+            using (var context = new ECommerceDbContext(options))
+            {
+                context.Products.Add(product);
+                context.SaveChanges();
+            }
+
+            //Act//Assert
+            using (var context = new ECommerceDbContext(options))
+            {
+                var sut = new CategoryRepository(context);
+                Assert.Throws<ProductStillExists>(()=>sut.Delete(category.ID));
+            }
+            
         }
 
     }

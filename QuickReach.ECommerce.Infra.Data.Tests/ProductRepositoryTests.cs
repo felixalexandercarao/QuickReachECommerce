@@ -9,6 +9,8 @@ using QuickReach.ECommerce.Infra.Data.Repositories;
 using QuickReach.ECommerce.Domain.Models;
 using Microsoft.EntityFrameworkCore.InMemory.Storage.Internal;
 using Microsoft.Data.Sqlite;
+using QuickReach.ECommerce.Domain.NewExceptions;
+
 namespace QuickReach.ECommerce.Infra.Data.Tests
 {
     public class ProductRepositoryTests
@@ -315,6 +317,40 @@ namespace QuickReach.ECommerce.Infra.Data.Tests
                 //Assert
                 Assert.Null(result);
             } 
+        }
+
+        [Fact]
+        public void Create_DataWithNonExistingCategory_ShouldThrowException()
+        {
+            //Arrange
+            var connectionBuilder = new SqliteConnectionStringBuilder()
+            {
+                DataSource = ":memory:"
+            };
+            var connection = new SqliteConnection(connectionBuilder.ConnectionString);
+
+            var options = new DbContextOptionsBuilder<ECommerceDbContext>()
+                    .UseSqlite(connection)
+                    .Options;
+            
+            var product = new Product
+            {
+                Name = "ZST Earphones",
+                Description = "Hybrid Earphones",
+                IsActive = true,
+                Price = 500,
+                ImageURL = "picture.net",
+                CategoryID = -1
+            };
+            using (var context = new ECommerceDbContext(options))
+            {
+                context.Database.OpenConnection();
+                context.Database.EnsureCreated();
+                var sut = new ProductRepository(context);
+                //Act//Assert
+                Assert.Throws<CategoryDoesntExist>(()=>sut.Create(product));
+            }
+
         }
     }
 }

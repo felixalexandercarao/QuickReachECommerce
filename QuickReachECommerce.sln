@@ -3,17 +3,21 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28803.452
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuickReach.ECommerce.Infra.Data", "QuickReachECommerce.Infra.Data\QuickReach.ECommerce.Infra.Data.csproj", "{8DE00A68-905D-430A-BD35-861BA7AF5056}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuickReach.ECommerce.Infra.Data", "QuickReachECommerce.Infra.Data\QuickReach.ECommerce.Infra.Data.csproj", "{8DE00A68-905D-430A-BD35-861BA7AF5056}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuickReach.ECommerce.Domain", "QuickReach.ECommerce.Domain\QuickReach.ECommerce.Domain.csproj", "{BE7DC5A7-EFC3-4104-BE37-45ADA681B9D5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuickReach.ECommerce.Domain", "QuickReach.ECommerce.Domain\QuickReach.ECommerce.Domain.csproj", "{BE7DC5A7-EFC3-4104-BE37-45ADA681B9D5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuickReach.ECommerce.Domain.Models", "QuickReach.ECommerce.Domain.Models\QuickReach.ECommerce.Domain.Models.csproj", "{3EC2AB29-BF55-4052-B8FD-A0280B901ECD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuickReach.ECommerce.Domain.Models", "QuickReach.ECommerce.Domain.Models\QuickReach.ECommerce.Domain.Models.csproj", "{3EC2AB29-BF55-4052-B8FD-A0280B901ECD}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3.0 Domain", "3.0 Domain", "{5CEB127A-99A5-4C0D-8CEE-A7E001CAEB02}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4.0 Infrastructure", "4.0 Infrastructure", "{9D178507-30A2-40D7-9C2A-D45A89556475}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuickReach.ECommerce.Infra.Data.Tests", "QuickReach.ECommerce.Infra.Data.Tests\QuickReach.ECommerce.Infra.Data.Tests.csproj", "{D8D8E3B8-8972-4DA7-B47A-00FFBB32ADD5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuickReach.ECommerce.Infra.Data.Tests", "QuickReach.ECommerce.Infra.Data.Tests\QuickReach.ECommerce.Infra.Data.Tests.csproj", "{D8D8E3B8-8972-4DA7-B47A-00FFBB32ADD5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1.0 API", "1.0 API", "{386827DB-087C-46B4-AE4A-1D05658861DA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuckReach.ECommerce.API", "QuckReach.ECommerce.API\QuckReach.ECommerce.API.csproj", "{F3258474-9E9E-41B0-AEDF-8DE737D9572F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,6 +41,10 @@ Global
 		{D8D8E3B8-8972-4DA7-B47A-00FFBB32ADD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D8D8E3B8-8972-4DA7-B47A-00FFBB32ADD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D8D8E3B8-8972-4DA7-B47A-00FFBB32ADD5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3258474-9E9E-41B0-AEDF-8DE737D9572F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3258474-9E9E-41B0-AEDF-8DE737D9572F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3258474-9E9E-41B0-AEDF-8DE737D9572F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3258474-9E9E-41B0-AEDF-8DE737D9572F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -46,6 +54,7 @@ Global
 		{BE7DC5A7-EFC3-4104-BE37-45ADA681B9D5} = {5CEB127A-99A5-4C0D-8CEE-A7E001CAEB02}
 		{3EC2AB29-BF55-4052-B8FD-A0280B901ECD} = {5CEB127A-99A5-4C0D-8CEE-A7E001CAEB02}
 		{D8D8E3B8-8972-4DA7-B47A-00FFBB32ADD5} = {9D178507-30A2-40D7-9C2A-D45A89556475}
+		{F3258474-9E9E-41B0-AEDF-8DE737D9572F} = {386827DB-087C-46B4-AE4A-1D05658861DA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8FD26A6C-5386-4BB0-964C-B676CEDF30A0}

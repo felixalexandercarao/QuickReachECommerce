@@ -22,7 +22,6 @@ namespace QuickReach.ECommerce.Domain.Models
         [Required]
         public int CategoryID { get; set; }
 
-        [Required]
         public Category Category { get; set; }
 
         [Required]
