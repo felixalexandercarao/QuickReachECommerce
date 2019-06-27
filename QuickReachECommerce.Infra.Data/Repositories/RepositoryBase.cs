@@ -49,6 +49,11 @@ namespace QuickReach.ECommerce.Infra.Data.Repositories
             return result;
         }
 
+        public virtual IEnumerable<TEntity> Retrieve(string search = "", int skip = 0, int count = 10)
+        {
+            throw new NotImplementedException();
+        }
+
         public TEntity Update(int entityID, TEntity entity)
         {
             this.context.Update<TEntity>(entity);

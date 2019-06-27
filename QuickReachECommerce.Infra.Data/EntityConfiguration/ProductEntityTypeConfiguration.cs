@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace QuickReach.ECommerce.Infra.Data.EntityConfiguration
-{
+{ 
     public class ProductEntityTypeConfiguration : IEntityTypeConfiguration<Product>
     {
         public void Configure(EntityTypeBuilder<Product> builder)
@@ -14,11 +14,6 @@ namespace QuickReach.ECommerce.Infra.Data.EntityConfiguration
             builder.Property(p => p.ID)
                    .IsRequired()
                    .ValueGeneratedOnAdd();
-
-            builder.HasOne(c => c.Category)
-                   .WithMany(p => p.Products)
-                   .OnDelete(DeleteBehavior.ClientSetNull);
-            ;
         }
     }
 }

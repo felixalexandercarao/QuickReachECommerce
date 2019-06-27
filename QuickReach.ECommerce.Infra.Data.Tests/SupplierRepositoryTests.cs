@@ -5,6 +5,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using Xunit;
+using QuickReach.ECommerce.Infra.Data.Tests.Utilities;
 
 namespace QuickReach.ECommerce.Infra.Data.Tests
 {
@@ -13,9 +14,7 @@ namespace QuickReach.ECommerce.Infra.Data.Tests
         [Fact]
         public void Create_WithValidInformation_Works()
         {
-            var options = new DbContextOptionsBuilder<ECommerceDbContext>()
-                .UseInMemoryDatabase($"CategoryForTesting{Guid.NewGuid()}")
-                .Options;
+            var options = ConnectionOptionHelper.SqLite();
             //Arrange
             Supplier supplier = new Supplier
             {
@@ -25,6 +24,8 @@ namespace QuickReach.ECommerce.Infra.Data.Tests
             };
             using (var context = new ECommerceDbContext(options))
             {
+                context.Database.OpenConnection();
+                context.Database.EnsureCreated();
                 var sut = new SupplierRepository(context);
                 //Act
                 sut.Create(supplier);
@@ -42,9 +43,7 @@ namespace QuickReach.ECommerce.Infra.Data.Tests
         [Fact]
         public void Delete_RemovesValidDataFromDatabase()
         {
-            var options = new DbContextOptionsBuilder<ECommerceDbContext>()
-                .UseInMemoryDatabase($"CategoryForTesting{Guid.NewGuid()}")
-                .Options;
+            var options = ConnectionOptionHelper.SqLite();
             //Arrange
             Supplier supplier = new Supplier
             {
@@ -54,6 +53,8 @@ namespace QuickReach.ECommerce.Infra.Data.Tests
             };
             using (var context = new ECommerceDbContext(options))
             {
+                context.Database.OpenConnection();
+                context.Database.EnsureCreated();
                 context.Suppliers.Add(supplier);
                 context.SaveChanges();
             }
@@ -72,9 +73,7 @@ namespace QuickReach.ECommerce.Infra.Data.Tests
         [Fact]
         public void Retrieve_ValidData_ShouldWork()
         {
-            var options = new DbContextOptionsBuilder<ECommerceDbContext>()
-                .UseInMemoryDatabase($"CategoryForTesting{Guid.NewGuid()}")
-                .Options;
+            var options = ConnectionOptionHelper.SqLite();
             //Arrange
             string expectedName = "Yakult Inc.";
             string expectedDescription = "Lactobacillus Protectus";
@@ -87,6 +86,8 @@ namespace QuickReach.ECommerce.Infra.Data.Tests
             };
             using (var context = new ECommerceDbContext(options))
             {
+                context.Database.OpenConnection();
+                context.Database.EnsureCreated();
                 context.Suppliers.Add(supplier);
                 context.SaveChanges();
             }
@@ -111,12 +112,12 @@ namespace QuickReach.ECommerce.Infra.Data.Tests
         [InlineData(20, 5, 0)]
         public void Retrieve_WithSkipAndCount_Work(int startNumber, int skipAmount, int expectedResult)
         {
-            var options = new DbContextOptionsBuilder<ECommerceDbContext>()
-                .UseInMemoryDatabase($"CategoryForTesting{Guid.NewGuid()}")
-                .Options;
+            var options = ConnectionOptionHelper.SqLite();
             //Arrange
             using (var context = new ECommerceDbContext(options))
             {
+                context.Database.OpenConnection();
+                context.Database.EnsureCreated();
                 for (int i = 0; i < 20; i += 1)
                 {
                     context.Suppliers.Add(new Supplier
@@ -142,11 +143,11 @@ namespace QuickReach.ECommerce.Infra.Data.Tests
         [Fact]
         public void Retrieve_WithMissingData_ShouldReturnNull()
         {
-            var options = new DbContextOptionsBuilder<ECommerceDbContext>()
-                .UseInMemoryDatabase($"CategoryForTesting{Guid.NewGuid()}")
-                .Options;
+            var options = ConnectionOptionHelper.SqLite();
             using (var context = new ECommerceDbContext(options))
             {
+                context.Database.OpenConnection();
+                context.Database.EnsureCreated();
                 //Arrange
                 var sut = new SupplierRepository(context);
                 //Act
@@ -159,9 +160,7 @@ namespace QuickReach.ECommerce.Infra.Data.Tests
         [Fact]
         public void Update_WithValidData_ShouldWork()
         {
-            var options = new DbContextOptionsBuilder<ECommerceDbContext>()
-                .UseInMemoryDatabase($"CategoryForTesting{Guid.NewGuid()}")
-                .Options;
+            var options = ConnectionOptionHelper.SqLite();
             //Arrange
             string expectedName = "Yakult Inc.";
             string expectedDescription = "Lactobacillus Protectus";
@@ -171,6 +170,8 @@ namespace QuickReach.ECommerce.Infra.Data.Tests
             
             using (var context = new ECommerceDbContext(options))
             {
+                context.Database.OpenConnection();
+                context.Database.EnsureCreated();
                 Supplier supplier = new Supplier
                 {
                     Name = "Jakult inc.",

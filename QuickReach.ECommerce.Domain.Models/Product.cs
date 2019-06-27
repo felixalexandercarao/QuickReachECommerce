@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -20,13 +21,9 @@ namespace QuickReach.ECommerce.Domain.Models
         public decimal Price { get; set; }
 
         [Required]
-        public int CategoryID { get; set; }
-
-        public Category Category { get; set; }
-
-        [Required]
         public string ImageURL { get; set; }
 
         public bool IsActive { get; set; }
+        public IEnumerable<ProductCategory> ProductCategories { get; set; }
     }
 }

@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
-using QuickReach.ECommerce.Domain.NewExceptions;
 
 namespace QuickReach.ECommerce.Infra.Data.Repositories
 {
@@ -16,23 +15,27 @@ namespace QuickReach.ECommerce.Infra.Data.Repositories
 
         }
 
-        public IEnumerable<Category> Retrieve(string search = "", int skip = 0, int count = 10)
+        public override IEnumerable<Category> Retrieve(string search = "",int skip = 0, int count = 10)
         {
-            var result = this.context.Categories
-                .Where(c => c.Name.Contains(search) || c.Description.Contains(search))
-                .Skip(skip)
-                .Take(count)
-                .ToList();
+            var result = this.context
+                    .Set<Category>()
+                    .AsNoTracking()
+                    .Where(c => c.Name.Contains(search) ||
+                                c.Description.Contains(search))
+                    .Skip(skip)
+                    .Take(count)
+                    .ToList();
 
             return result;
         }
-        public override Category Retrieve(int entityID)
+        public override Category Retrieve(int entityId)
         {
             var entity = this.context.Categories
-                .AsNoTracking()
-                .Include(c => c.Products)
-                .Where(c => c.ID == entityID)
-                .FirstOrDefault();
+                        .Include(c => c.ProductCategories)
+                        .Include(c => c.ChildCategories)
+                        .Include(c => c.ParentCategories)
+                        .Where(c => c.ID == entityId)
+                        .FirstOrDefault();
             return entity;
         }
     }

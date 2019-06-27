@@ -49,7 +49,7 @@ namespace QuckReach.ECommerce.API.Controllers
             return CreatedAtAction(nameof(this.Get),new { id = newCategory.ID }, newCategory);
         }
 
-        //POST api/values
+        //PUT api/values
         [HttpPut("{id}")]
         public IActionResult Put(int id,[FromBody] Category category)
         {
