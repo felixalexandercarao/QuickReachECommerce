@@ -95,7 +95,7 @@ namespace QuickReach.ECommerce.Infra.Data.Migrations
                     b.HasOne("QuickReach.ECommerce.Domain.Models.Category", "Category")
                         .WithMany("Products")
                         .HasForeignKey("CategoryID")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 #pragma warning restore 612, 618
         }

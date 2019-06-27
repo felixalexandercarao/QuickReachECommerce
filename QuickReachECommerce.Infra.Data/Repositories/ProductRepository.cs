@@ -25,18 +25,6 @@ namespace QuickReach.ECommerce.Infra.Data.Repositories
 
             return result;
         }
-        public override Product Create(Product newEntity)
-        {
-            var checklist = this.context.Categories
-                .Where(c => c.ID == newEntity.CategoryID);
-            if (checklist.Count() == 0)
-            {
-                throw new CategoryDoesntExist();
-            }
-            this.context.Products
-                        .Add(newEntity);
-            this.context.SaveChanges();
-            return newEntity;
-        }
+
     }
 }

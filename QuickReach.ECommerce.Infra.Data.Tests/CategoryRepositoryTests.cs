@@ -218,7 +218,7 @@ namespace QuickReach.ECommerce.Infra.Data.Tests
         }
 
         [Fact]
-        public void Delete_CategoryWithExistingProducts_ShouldThrowExceptions()
+        public void Delete_CategoryWithExistingProducts_ShouldThrowException()
         {
             //Arrange
             var connectionBuilder = new SqliteConnectionStringBuilder()
@@ -249,7 +249,7 @@ namespace QuickReach.ECommerce.Infra.Data.Tests
                 Description = "Hybrid Earphones",
                 IsActive = true,
                 Price = 500,
-                ImageURL = "picture.net",
+                ImageURL = "https://images-na.ssl-images-amazon.com/images/I/61aQ5xUpsdL._SX679_.jpg",
                 CategoryID = category.ID,
             };
             using (var context = new ECommerceDbContext(options))
@@ -262,7 +262,7 @@ namespace QuickReach.ECommerce.Infra.Data.Tests
             using (var context = new ECommerceDbContext(options))
             {
                 var sut = new CategoryRepository(context);
-                Assert.Throws<ProductStillExists>(()=>sut.Delete(category.ID));
+                Assert.Throws<DbUpdateException>(()=>sut.Delete(category.ID));
             }
             
         }

@@ -35,17 +35,5 @@ namespace QuickReach.ECommerce.Infra.Data.Repositories
                 .FirstOrDefault();
             return entity;
         }
-        public override void Delete(int entityID)
-        {
-            var entityToRemove = Retrieve(entityID);
-            var checklist = this.context.Products
-                .Where(c => c.CategoryID == entityID);
-            if (checklist.Count()!=0)
-            {
-                throw new ProductStillExists();
-            }
-            this.context.Categories.Remove(entityToRemove);
-            this.context.SaveChanges();
-        }
     }
 }

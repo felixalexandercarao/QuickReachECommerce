@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace QuickReach.ECommerce.Infra.Data.Migrations
 {
-    public partial class InitialMigration : Migration
+    public partial class Addedonmodelcreation : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -14,11 +14,27 @@ namespace QuickReach.ECommerce.Infra.Data.Migrations
                     ID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(maxLength: 40, nullable: false),
-                    Description = table.Column<string>(maxLength: 255, nullable: false)
+                    Description = table.Column<string>(maxLength: 255, nullable: false),
+                    IsActive = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Category", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Supplier",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(maxLength: 40, nullable: false),
+                    Description = table.Column<string>(maxLength: 255, nullable: false),
+                    IsActive = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Supplier", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -31,7 +47,8 @@ namespace QuickReach.ECommerce.Infra.Data.Migrations
                     Description = table.Column<string>(maxLength: 255, nullable: false),
                     Price = table.Column<decimal>(nullable: false),
                     CategoryID = table.Column<int>(nullable: false),
-                    ImageURL = table.Column<string>(nullable: false)
+                    ImageURL = table.Column<string>(nullable: false),
+                    IsActive = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -41,7 +58,7 @@ namespace QuickReach.ECommerce.Infra.Data.Migrations
                         column: x => x.CategoryID,
                         principalTable: "Category",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -54,6 +71,9 @@ namespace QuickReach.ECommerce.Infra.Data.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Product");
+
+            migrationBuilder.DropTable(
+                name: "Supplier");
 
             migrationBuilder.DropTable(
                 name: "Category");

@@ -348,7 +348,7 @@ namespace QuickReach.ECommerce.Infra.Data.Tests
                 context.Database.EnsureCreated();
                 var sut = new ProductRepository(context);
                 //Act//Assert
-                Assert.Throws<CategoryDoesntExist>(()=>sut.Create(product));
+                Assert.Throws<DbUpdateException>(()=>sut.Create(product));
             }
 
         }
