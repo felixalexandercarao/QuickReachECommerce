@@ -16,9 +16,11 @@ namespace QuckReach.ECommerce.API.Controllers
     public class CategoriesController : ControllerBase
     {
         private readonly ICategoryRepository repository;
-        public CategoriesController(ICategoryRepository repository)
+        private readonly IProductRepository productRepository;
+        public CategoriesController(ICategoryRepository repository, IProductRepository productRepository)
         {
             this.repository = repository;
+            this.productRepository = productRepository;
         }
 
         [HttpGet]
@@ -80,5 +82,52 @@ namespace QuckReach.ECommerce.API.Controllers
             return Ok();
         }
 
+        [HttpPut("{categoryid}/products")]
+        public IActionResult PutCategoryProduct(int categoryID, [FromBody] ProductCategory entity)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            if (entity.CategoryID!=categoryID)
+            {
+                return BadRequest();
+            }
+
+            var category = repository.Retrieve(categoryID);
+            if (category == null)
+            {
+                return NotFound();
+            }
+
+            if (productRepository.Retrieve(entity.ProductID) == null)
+            {
+                return NotFound();
+            }
+            category.AddProduct(entity);
+            repository.Update(categoryID, category);
+            return Ok(category);
+        }
+        [HttpPut("{id}/products/{productId}")]
+        public IActionResult DeleteCategoryProduct(int id, int productId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            var category = repository.Retrieve(id);
+            if (category == null)
+            {
+                return NotFound();
+            }
+            if (productRepository.Retrieve(productId) == null)
+            {
+                return NotFound();
+            }
+            category.RemoveProduct(productId);
+            repository.Update(id, category);
+            return Ok();
+        }
     }
 }

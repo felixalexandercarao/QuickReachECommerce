@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using System.Text;
 
 namespace QuickReach.ECommerce.Domain.Models
@@ -11,6 +12,8 @@ namespace QuickReach.ECommerce.Domain.Models
         public Category()
         {
             this.ChildCategories = new List<CategoryRollup>();
+            this.ProductCategories = new List<ProductCategory>();
+            this.ParentCategories = new List<CategoryRollup>();
         }
 
         [Required]
@@ -43,6 +46,23 @@ namespace QuickReach.ECommerce.Domain.Models
                 ChildCategoryID = categoryId
             };
             ((ICollection<CategoryRollup>)this.ChildCategories).Add(child);
+            
+        }
+        public void AddProduct(ProductCategory child)
+        {
+            ((ICollection<ProductCategory>)this.ProductCategories).Add(child);
+        }
+        public void RemoveProduct(int productId)
+        {
+            var child = this.GetProduct(productId);
+
+            ((ICollection<ProductCategory>)this.ProductCategories).Remove(child);
+        }
+        public ProductCategory GetProduct(int productId)
+        {
+            return ((ICollection<ProductCategory>)this.ProductCategories)
+                    .FirstOrDefault(pc => pc.CategoryID == this.ID &&
+                               pc.ProductID == productId);
         }
     }
 }
