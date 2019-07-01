@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using QuckReach.ECommerce.API.ViewModel;
 using QuickReach.ECommerce.Domain;
 using QuickReach.ECommerce.Domain.Models;
 using QuickReach.ECommerce.Infra.Data;
@@ -16,9 +18,11 @@ namespace QuckReach.ECommerce.API.Controllers
     public class ProductsController : ControllerBase
     {
         private readonly IProductRepository repository;
-        public ProductsController(IProductRepository repository)
+        private readonly ICategoryRepository categoryRepository;
+        public ProductsController(IProductRepository repository, ICategoryRepository categoryRepository)
         {
             this.repository = repository;
+            this.categoryRepository = categoryRepository;
         }
 
         [HttpGet]
@@ -81,5 +85,6 @@ namespace QuckReach.ECommerce.API.Controllers
             return Ok();
         }
 
+        
     }
 }

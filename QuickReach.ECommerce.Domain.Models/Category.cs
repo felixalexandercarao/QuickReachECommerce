@@ -25,6 +25,7 @@ namespace QuickReach.ECommerce.Domain.Models
         public string Description { get; set; }
 
         public IEnumerable<ProductCategory> ProductCategories { get; set; }
+        
 
         public bool IsActive { get; set; }
         public IEnumerable<CategoryRollup> ChildCategories { get; set; }

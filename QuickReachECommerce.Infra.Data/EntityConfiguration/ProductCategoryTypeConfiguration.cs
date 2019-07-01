@@ -15,6 +15,7 @@ namespace QuickReach.ECommerce.Infra.Data.EntityConfiguration
             builder.ToTable("ProductCategory");
 
             builder.HasKey(cr => new { cr.CategoryID, cr.ProductID });
+
             builder.HasOne(cr => cr.Category)
                    .WithMany(c => c.ProductCategories)
                    .HasForeignKey("CategoryID");

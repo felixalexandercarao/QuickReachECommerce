@@ -25,5 +25,6 @@ namespace QuickReach.ECommerce.Domain.Models
 
         public bool IsActive { get; set; }
         public IEnumerable<ProductCategory> ProductCategories { get; set; }
+        public IEnumerable<ProductSupplier> ProductSuppliers { get; set; }
     }
 }
