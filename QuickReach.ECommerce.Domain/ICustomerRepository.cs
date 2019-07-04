@@ -5,8 +5,7 @@ using System.Text;
 
 namespace QuickReach.ECommerce.Domain
 {
-    public interface ICartRepository : IRepository<Cart>
+    public interface ICustomerRepository : IRepository<Customer>
     {
-
     }
 }

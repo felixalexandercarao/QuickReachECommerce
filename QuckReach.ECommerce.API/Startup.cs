@@ -34,6 +34,9 @@ namespace QuckReach.ECommerce.API
             services.AddTransient<ICategoryRepository, CategoryRepository>();
             services.AddTransient<IProductRepository, ProductRepository>();
             services.AddTransient<ISupplierRepository, SupplierRepository>();
+            services.AddTransient<ICartRepository, CartRepository>();
+            services.AddTransient<IManufacturerRepository, ManufacturerRepository>();
+            services.AddTransient<ICustomerRepository, CustomerRepository>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
                 .AddJsonOptions(opts=>opts.SerializerSettings.ReferenceLoopHandling=ReferenceLoopHandling.Ignore);
