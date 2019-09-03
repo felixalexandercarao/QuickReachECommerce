@@ -30,7 +30,7 @@ namespace QuckReach.ECommerce.API.Controllers
         }
 
         [HttpGet]
-        public IActionResult Get(string search=" ",int skip=0, int count=10)
+        public IActionResult Get(string search=" ",int skip=0, int count=100)
         {
             var categories = this.repository.Retrieve(search,skip,count);
             return Ok(categories);

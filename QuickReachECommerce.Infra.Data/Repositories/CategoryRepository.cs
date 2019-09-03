@@ -30,12 +30,13 @@ namespace QuickReach.ECommerce.Infra.Data.Repositories
         }
         public override Category Retrieve(int entityId)
         {
-            var entity = this.context.Categories
+            var entity = this.context.Categories.AsNoTracking()
                         .Include(c => c.ProductCategories)
                         .Include(c => c.ChildCategories)
                         .Include(c => c.ParentCategories)
                         .Where(c => c.ID == entityId)
-                        .FirstOrDefault();
+                        .FirstOrDefault()
+                        ;
             return entity;
         }
     }
