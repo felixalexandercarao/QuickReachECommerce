@@ -39,6 +39,7 @@ namespace QuickReach.ECommerce.Infra.Data.Repositories
             return entity;
         }
 
+
         public IEnumerable<TEntity> Retrieve(int skip = 0, int count = 10)
         {
             var result = this.context.Set<TEntity>()
